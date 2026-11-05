@@ -321,6 +321,90 @@ h1 {
   display: inline-block;
 }
 
+/* Event Registration & Live Stream Actions */
+.event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.reg-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--google-blue);
+  background: var(--bg-surface);
+  border: 1px solid var(--brand-blue);
+  padding: 5px 11px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.reg-link:hover {
+  background: var(--google-blue-tint);
+  border-color: var(--google-blue);
+  text-decoration: underline;
+}
+
+.reg-link:focus-visible {
+  outline: 2px solid var(--google-blue);
+  outline-offset: 2px;
+}
+
+.btn-livestream {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--google-red-text);
+  background: var(--google-red-tint);
+  border: 1px solid var(--brand-red);
+  padding: 5px 11px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.btn-livestream:hover {
+  background: var(--google-red);
+  border-color: var(--google-red);
+  color: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-livestream:focus-visible {
+  outline: 2px solid var(--google-red);
+  outline-offset: 2px;
+}
+
+.btn-livestream[href="TBD"] {
+  cursor: not-allowed;
+}
+
+.tbd-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--google-red-text);
+  background: var(--bg-surface);
+  border: 1px solid var(--brand-red);
+  padding: 0.5px 5px;
+  border-radius: 4px;
+  line-height: 1.35;
+}
+
+.btn-livestream:not([href="TBD"]) .tbd-badge {
+  display: none;
+}
+
 /* Status & Utility Bar */
 .status-bar {
   display: flex;
@@ -359,7 +443,7 @@ h1 {
   background: var(--google-blue-tint);
 }
 
-/* Day & Block Headers */
+/* Day Headers */
 .day-section {
   margin-top: 24px;
 }
@@ -386,18 +470,6 @@ h1 {
   font-size: 13px;
   color: var(--text-secondary);
   font-weight: 500;
-}
-
-.block-header {
-  margin: 20px 0 10px;
-  padding: 7px 12px;
-  background: var(--bg-subtle);
-  border-left: 3px solid var(--google-blue);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  letter-spacing: 0.01em;
 }
 
 /* Break / Marker Row */
