@@ -203,7 +203,6 @@ function matchesFilters(item) {
       item.abstract,
       item.bio,
       item.format,
-      item.block,
       (item.tracks || []).join(' ')
     ].join(' ').toLowerCase();
     return terms.every(t => haystack.includes(t));
@@ -238,13 +237,11 @@ function render() {
 
   let html = '';
   let currentDay = null;
-  let currentBlock = null;
 
   filtered.forEach(item => {
     if (item.day !== currentDay) {
       if (currentDay !== null) html += `</section>`;
       currentDay = item.day;
-      currentBlock = null;
       const dayTitle = item.day === 1
         ? 'Day 1 — Friday, 27 November 2026'
         : 'Day 2 — Saturday, 28 November 2026';
@@ -256,11 +253,6 @@ function render() {
             <span>${daySub}</span>
           </div>
       `;
-    }
-
-    if (item.block && item.block !== currentBlock) {
-      currentBlock = item.block;
-      html += `<div class="block-header">${escapeHtml(currentBlock)}</div>`;
     }
 
     const tInfo = formatTimeRange(item.startUtc, item.endUtc);
@@ -340,9 +332,9 @@ function render() {
                   aria-label="Copy direct link to this session"
                 >
                   ${isCopied
-                    ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied</span>`
-                    : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
-                  }
+        ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied</span>`
+        : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
+      }
                 </a>
                 <button
                   class="bookmark-btn ${isSaved ? 'active' : ''}"
