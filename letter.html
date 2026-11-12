@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speaker Invitation Letter Generator — APAC AI for Science DevFest 2026</title>
+  <link rel="icon" type="image/png" href="ai-for-science_beaker.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="letter.css" />
+</head>
+
+<body>
+  <div class="google-accent-bar no-print"></div>
+
+  <header class="app-header no-print">
+    <div class="app-container app-header-inner">
+      <div class="app-brand">
+        <img src="ai-for-science_beaker.png" alt="AI for Science logo" class="app-brand-logo" />
+        <div>
+          <div class="eyebrow app-eyebrow">GDG AI for Science</div>
+          <h1 class="app-title">Official Speaker Invitation Letter Generator</h1>
+          <p class="app-subtitle">APAC AI for Science DevFest 2026 · 27–28 November 2026</p>
+        </div>
+      </div>
+
+      <div class="app-header-actions">
+        <a href="index.html" class="app-nav-link">← Speaker Program</a>
+        <button type="button" id="resetTemplateBtn" class="btn-secondary-sm">Blank Template</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-container workspace-grid">
+    <aside class="controls-panel no-print" aria-label="Speaker selector and letter customization">
+      <section class="panel-card">
+        <div class="panel-step-header">
+          <span class="step-pill">1</span>
+          <h2>Find Speaker</h2>
+        </div>
+
+        <div class="field-group">
+          <label for="speakerSearch" class="field-label">Input Speaker Name</label>
+          <div class="combobox-wrap">
+            <svg class="combobox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="speakerSearch" class="field-input combobox-input"
+              placeholder="Type speaker name (e.g., Vinay, Yousef, Nevasini)..." autocomplete="off"
+              role="combobox" aria-expanded="false" aria-controls="speakerDropdown" aria-autocomplete="list" />
+            <button type="button" id="clearSpeakerSearchBtn" class="combobox-clear" title="Clear speaker search"
+              aria-label="Clear speaker search">&times;</button>
+            <ul id="speakerDropdown" class="combobox-dropdown" role="listbox" aria-label="Matching speakers" hidden></ul>
+          </div>
+          <p class="field-hint">Matches by speaker name, affiliation, session title, or ID across all 41 sessions.</p>
+        </div>
+
+        <div class="field-group">
+          <label for="speakerSelect" class="field-label">Or Browse All Speakers</label>
+          <select id="speakerSelect" class="field-select">
+            <option value="__TEMPLATE__">Blank Official Template (Placeholders)</option>
+          </select>
+        </div>
+
+        <div class="status-row">
+          <span id="modeBadge" class="mode-badge">Template Mode</span>
+          <button type="button" id="customSpeakerBtn" class="btn-link-inline">Use custom / unlisted speaker</button>
+        </div>
+      </section>
+
+      <section class="panel-card">
+        <div class="panel-step-header">
+          <span class="step-pill">2</span>
+          <h2>Customize Letter Details</h2>
+        </div>
+
+        <div class="field-group">
+          <label for="fieldSpeaker" class="field-label">Recipient Name</label>
+          <input type="text" id="fieldSpeaker" class="field-input" />
+        </div>
+
+        <div class="field-grid-2">
+          <div class="field-group">
+            <label for="fieldDesignation" class="field-label">Designation / Role</label>
+            <input type="text" id="fieldDesignation" class="field-input" />
+          </div>
+          <div class="field-group">
+            <label for="fieldAffiliation" class="field-label">Affiliation</label>
+            <input type="text" id="fieldAffiliation" class="field-input" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="fieldEmail" class="field-label">Speaker Email <span class="label-opt">(optional)</span></label>
+          <input type="email" id="fieldEmail" class="field-input"
+            placeholder="Leave blank to omit or enter email for workplace letter" />
+        </div>
+
+        <div class="field-group">
+          <label for="fieldTitle" class="field-label">Session Title</label>
+          <textarea id="fieldTitle" class="field-textarea" rows="2"></textarea>
+        </div>
+
+        <div class="field-grid-2">
+          <div class="field-group">
+            <label for="fieldFormat" class="field-label">Format &amp; Duration</label>
+            <input type="text" id="fieldFormat" class="field-input" />
+          </div>
+          <div class="field-group">
+            <label for="fieldTrack" class="field-label">Track</label>
+            <input type="text" id="fieldTrack" class="field-input" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="tzSelect" class="field-label">Speaker Local Time Display</label>
+          <select id="tzSelect" class="field-select">
+            <option value="PROGRAMMED">Speaker's Programmed Timezone (Timetable)</option>
+            <option value="LOCAL">My Browser Local Time</option>
+            <option value="Australia/Sydney">AEDT — Sydney (UTC+11)</option>
+            <option value="Asia/Tokyo">JST / KST — Tokyo &amp; Seoul (UTC+9)</option>
+            <option value="Australia/Perth">AWST / SGT — Perth &amp; Singapore (UTC+8)</option>
+            <option value="Asia/Kolkata">IST — India (UTC+5:30)</option>
+            <option value="Europe/Berlin">CET — Berlin &amp; Paris (UTC+1)</option>
+            <option value="UTC">UTC</option>
+            <option value="America/New_York">EST — US East (UTC-5)</option>
+            <option value="America/Los_Angeles">PST — US West (UTC-8)</option>
+          </select>
+        </div>
+
+        <div class="field-grid-2">
+          <div class="field-group">
+            <label for="fieldSchedule" class="field-label">Scheduled Date &amp; Time</label>
+            <input type="text" id="fieldSchedule" class="field-input" />
+          </div>
+          <div class="field-group">
+            <label for="fieldLocalTime" class="field-label">Speaker Local Time</label>
+            <input type="text" id="fieldLocalTime" class="field-input" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="fieldDelivery" class="field-label">Delivery Mode</label>
+          <input type="text" id="fieldDelivery" class="field-input" />
+        </div>
+
+        <div class="field-grid-2">
+          <div class="field-group">
+            <label for="fieldIssueDate" class="field-label">Issue Date</label>
+            <input type="text" id="fieldIssueDate" class="field-input" />
+          </div>
+          <div class="field-group">
+            <label for="fieldRefId" class="field-label">Reference Code</label>
+            <input type="text" id="fieldRefId" class="field-input" />
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-card actions-card">
+        <div class="panel-step-header">
+          <span class="step-pill">3</span>
+          <h2>Export &amp; Share</h2>
+        </div>
+
+        <button type="button" id="printPdfBtn" class="btn-primary">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>Print / Save as PDF</span>
+        </button>
+
+        <div class="action-row-secondary">
+          <button type="button" id="downloadMdBtn" class="btn-secondary">Download .md</button>
+          <button type="button" id="copyMdBtn" class="btn-secondary">Copy Letter</button>
+          <button type="button" id="copyLinkBtn" class="btn-secondary">Copy Link</button>
+        </div>
+
+        <p id="actionFeedback" class="action-feedback" role="status" aria-live="polite"></p>
+        <p class="print-tip">Tip: In the print dialog, choose <strong>Save as PDF</strong>, paper size <strong>A4</strong>, and enable <strong>Background graphics</strong>.</p>
+      </section>
+    </aside>
+
+    <section class="preview-panel" aria-label="Official invitation letter preview">
+      <div class="preview-bar no-print">
+        <span class="preview-bar-title">Live Letter Preview</span>
+        <span class="preview-bar-meta">A4 · Single Page Print Ready</span>
+      </div>
+
+      <article class="letter-sheet" id="letterSheet">
+        <div class="sheet-accent-bar" aria-hidden="true">
+          <span class="seg-blue"></span>
+          <span class="seg-red"></span>
+          <span class="seg-yellow"></span>
+          <span class="seg-green"></span>
+        </div>
+
+        <div class="sheet-inner" id="letterSheetInner">
+          <p class="letter-p">Loading official invitation template…</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="letter.js"></script>
+</body>
+
+</html>

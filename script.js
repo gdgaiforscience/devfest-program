@@ -282,7 +282,7 @@ function render() {
       : item.designation;
     const affHtml = affText ? highlightText(escapeHtml(affText), state.query) : '';
 
-    const plainAbstract = item.abstract
+    const plainAbstract = (item.abstract || '')
       .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '$1')
       .replace(/\*\*/g, '')
       .replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1$2')
@@ -290,7 +290,7 @@ function render() {
       .trim();
     const previewPlain = escapeHtml(plainAbstract);
     const previewHtml = highlightText(previewPlain, state.query);
-    const fullAbstractHtml = formatRichAbstract(item.abstract, state.query);
+    const fullAbstractHtml = item.abstract ? formatRichAbstract(item.abstract, state.query) : '';
 
     const allLinks = [
       ...(item.resourceLinks || []).map(l => ({ ...l, prefix: '📄 ' })),
@@ -309,6 +309,27 @@ function render() {
          </div>`
       : '';
 
+    const hasExpandableDetails = Boolean(fullAbstractHtml || linksHtml || bioHtml);
+    const detailsSectionHtml = (previewHtml || hasExpandableDetails)
+      ? `
+            <div class="abstract-wrap">
+              ${previewHtml ? `<div class="abstract-preview">${previewHtml}</div>` : ''}
+              ${hasExpandableDetails ? `
+              <div class="details-panel">
+                ${fullAbstractHtml ? `<div class="abstract-full">${fullAbstractHtml}</div>` : ''}
+                ${linksHtml}
+                ${bioHtml}
+              </div>` : ''}
+            </div>
+            ${hasExpandableDetails ? `
+            <div class="card-footer-actions">
+              <button class="toggle-btn" onclick="toggleCard('${item.id}')">
+                ${isExpanded ? 'Hide full abstract ▲' : (item.bio && fullAbstractHtml ? 'Read full abstract & speaker bio ▼' : (item.bio ? 'Read speaker bio ▼' : 'Read full abstract ▼'))}
+              </button>
+            </div>` : ''}
+      `
+      : '';
+
     html += `
       <article class="session-card ${isExpanded ? 'expanded' : ''} ${isTargeted ? 'targeted' : ''} ${isSaved ? 'bookmarked' : ''}" id="${escapeHtml(item.slug)}" data-session-id="${item.id}">
         <div class="card-grid">
@@ -322,7 +343,7 @@ function render() {
 
           <div class="content-col">
             <div class="card-top-row">
-              <h3 class="session-title" onclick="toggleCard('${item.id}')">${titleHtml}</h3>
+              <h3 class="session-title" ${hasExpandableDetails ? `onclick="toggleCard('${item.id}')"` : ''}>${titleHtml}</h3>
               <div class="card-top-actions">
                 <a
                   href="#${escapeHtml(item.slug)}"
@@ -353,21 +374,7 @@ function render() {
               <span class="speaker-name">${speakerHtml}</span>
               ${affHtml ? `<span>·</span><span class="speaker-aff">${affHtml}</span>` : ''}
             </div>
-
-            <div class="abstract-wrap">
-              <div class="abstract-preview">${previewHtml}</div>
-              <div class="details-panel">
-                <div class="abstract-full">${fullAbstractHtml}</div>
-                ${linksHtml}
-                ${bioHtml}
-              </div>
-            </div>
-
-            <div class="card-footer-actions">
-              <button class="toggle-btn" onclick="toggleCard('${item.id}')">
-                ${isExpanded ? 'Hide full abstract ▲' : (item.bio ? 'Read full abstract & speaker bio ▼' : 'Read full abstract ▼')}
-              </button>
-            </div>
+            ${detailsSectionHtml}
           </div>
         </div>
       </article>
