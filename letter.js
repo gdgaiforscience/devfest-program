@@ -397,12 +397,10 @@ const FALLBACK_TEMPLATE_MD = [
   '# Google Developer Groups (GDG) AI for Science',
   '',
   '**APAC AI for Science DevFest 2026 — Official Speaker Invitation Letter**  ',
-  '*Issued for Workplace Approval and Institutional Documentation*',
   '',
   '---',
   '',
   '**Date:** [Date of Issue]  ',
-  '**Reference:** `GDG-AIFS-DF26-INV-[ID]`  ',
   '**Contact:** [gdgaiforscience@gmail.com](mailto:gdgaiforscience@gmail.com)  ',
   '',
   '**To:**  ',
@@ -420,14 +418,11 @@ const FALLBACK_TEMPLATE_MD = [
   '',
   '| Field | Confirmed Details |',
   '| :--- | :--- |',
-  '| **Event** | APAC AI for Science DevFest 2026 (Inaugural International Edition) |',
-  '| **Organizer** | Google Developer Groups (GDG) AI for Science (Regional Chapters: Australia, India, South Korea, Japan) |',
+  '| **Event** | APAC AI for Science DevFest 2026 |',
+  '| **Organizer** | Google Developer Groups (GDG) AI for Science |',
   '| **Session Title** | [Session Title] |',
   '| **Format & Duration** | [Session Format] ([Duration] minutes) |',
-  '| **Track** | [Session Track] |',
-  '| **Scheduled Date & Time** | [Day] · [Date, e.g., Friday, 27 November 2026] · [HH:MM - HH:MM] UTC ([HH:MM - HH:MM] AEDT) |',
-  '| **Speaker Local Time** | [HH:MM - HH:MM (Speaker Timezone)] |',
-  '| **Delivery Mode** | [Delivery Mode] |',
+  '| **Scheduled Date & Time** | [Day] · [Date, e.g., Friday, 27 November 2026] · [HH:MM - HH:MM] **UTC** |',
   '| **Event Registration Page** | [GDG AI for Science Event Page](https://gdg.community.dev/events/details/google-gdg-ai-for-science-australia-presents-apac-ai-for-science-devfest/) |',
   '',
   'GDG AI for Science is an international community of over 10,000 researchers, developers, and practitioners dedicated to advancing scientific discovery through artificial intelligence. APAC AI for Science DevFest 2026 brings together researchers, engineers, and practitioners across academia and industry via global virtual broadcasts (UTC+12 to UTC+5:30) and regional GDG chapter hubs. This letter is provided to support your workplace approval and official institutional documentation; invited speaker participation carries no registration fee.',
@@ -651,6 +646,26 @@ function prepareTemplateText(templateMd, v, useTokens) {
     ? fullRefId.slice('GDG-AIFS-DF26-INV-'.length)
     : fullRefId;
 
+  const schedStr = v.schedule || '[Scheduled Date & Time]';
+  const meta = appState.activeSession?.meta;
+  const isTplSchedule = schedStr.includes('[Day]') || schedStr.includes('[HH:MM - HH:MM]');
+  const schedParts = schedStr.split(/\s+·\s+/);
+  const utcMatch = schedStr.match(/(\d{2}:\d{2}\s*-\s*\d{2}:\d{2})\s*(?:\*\*)?UTC/);
+  const aedtMatch = schedStr.match(/(\d{2}:\d{2}\s*-\s*\d{2}:\d{2})\s*(?:\*\*)?AEDT/);
+
+  const dayLabel = isTplSchedule
+    ? '[Day]'
+    : ((schedParts.length >= 2 && schedParts[0]) || meta?.dayLabel || '[Day]');
+  const dateLabel = isTplSchedule
+    ? '[Date, e.g., Friday, 27 November 2026]'
+    : ((schedParts.length >= 2 && schedParts[1]) || meta?.dateLabel || '[Date, e.g., Friday, 27 November 2026]');
+  const utcTime = isTplSchedule
+    ? '[HH:MM - HH:MM]'
+    : ((utcMatch && utcMatch[1]) || meta?.utcTime || '[HH:MM - HH:MM]');
+  const aedtTime = isTplSchedule
+    ? '[HH:MM - HH:MM]'
+    : ((aedtMatch && aedtMatch[1]) || meta?.aedtTime || '[HH:MM - HH:MM]');
+
   const tokenValues = {
     ISSUE_DATE: v.issueDate || formatTodayIssueDate(),
     REF_ID: fullRefId,
@@ -664,7 +679,11 @@ function prepareTemplateText(templateMd, v, useTokens) {
     SESSION_TITLE: v.sessionTitle || '[Session Title]',
     FORMAT_DURATION: v.format || '[Session Format]',
     TRACK: v.track || '',
-    SCHEDULE: v.schedule || '[Scheduled Date & Time]',
+    SCHEDULE: schedStr,
+    DAY_LABEL: dayLabel,
+    DATE_LABEL: dateLabel,
+    UTC_TIME: utcTime,
+    AEDT_TIME: aedtTime,
     LOCAL_TIME: v.localTime || '[Speaker Local Time]',
     DELIVERY: v.delivery || '[Delivery Mode]'
   };
@@ -719,6 +738,10 @@ function prepareTemplateText(templateMd, v, useTokens) {
         '[Day] · [Date, e.g., Friday, 27 November 2026] · [HH:MM - HH:MM] UTC ([HH:MM - HH:MM] AEDT)',
         val('SCHEDULE')
       )
+      .replaceAll('[Day]', val('DAY_LABEL'))
+      .replaceAll('[Date, e.g., Friday, 27 November 2026]', val('DATE_LABEL'))
+      .replace(/\[HH:MM - HH:MM\](\s*\**AEDT\**)/g, (_, suffix) => `${val('AEDT_TIME')}${suffix}`)
+      .replaceAll('[HH:MM - HH:MM]', val('UTC_TIME'))
       .replaceAll('[HH:MM - HH:MM (Speaker Timezone)]', val('LOCAL_TIME'))
       .replaceAll('[Delivery Mode]', val('DELIVERY'));
 
